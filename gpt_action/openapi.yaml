@@ -1,0 +1,151 @@
+openapi: 3.0.3
+info:
+  title: Auditor Censo Escolar Fundeb
+  version: 0.1.0
+  description: OpenAPI inicial para conectar o GPT Business a API do projeto.
+servers:
+  - url: https://api.saberes.cloud
+paths:
+  /health:
+    get:
+      operationId: getHealth
+      summary: Verifica se a API esta no ar
+      responses:
+        "200":
+          description: Status da API
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+  /buscar-conhecimento:
+    post:
+      operationId: buscarConhecimento
+      summary: Busca trechos relevantes na base de conhecimento
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/KnowledgeSearchRequest"
+      responses:
+        "200":
+          description: Resultado da busca
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KnowledgeSearchResponse"
+  /processar-pdfs:
+    post:
+      operationId: processarPdfs
+      summary: Processa PDFs novos do bucket fundeb-conhecimento
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProcessPDFsRequest"
+      responses:
+        "200":
+          description: Resultado do processamento
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProcessPDFsResponse"
+  /consultar-dados:
+    post:
+      operationId: consultarDados
+      summary: Consulta tabelas estruturadas do projeto
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DataQueryRequest"
+      responses:
+        "200":
+          description: Resultado da consulta
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DataQueryResponse"
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+  schemas:
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: ok
+        service:
+          type: string
+          example: auditor-censo-escolar-fundeb
+    KnowledgeSearchRequest:
+      type: object
+      required:
+        - pergunta
+      properties:
+        pergunta:
+          type: string
+        limite:
+          type: integer
+          default: 8
+    KnowledgeSearchResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        resultados:
+          type: array
+          items:
+            type: object
+        detalhe:
+          type: string
+    ProcessPDFsRequest:
+      type: object
+      properties:
+        limit:
+          type: integer
+          default: 1
+    ProcessPDFsResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        processados:
+          type: integer
+        detalhe:
+          type: string
+    DataQueryRequest:
+      type: object
+      properties:
+        consulta:
+          type: string
+        municipio:
+          type: string
+        ano_referencia:
+          type: integer
+        limite:
+          type: integer
+          default: 20
+    DataQueryResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        registros:
+          type: array
+          items:
+            type: object
+        detalhe:
+          type: string

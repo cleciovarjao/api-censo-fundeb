@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+supabase
+openai
+PyMuPDF
+python-dotenv
+pydantic
+requests

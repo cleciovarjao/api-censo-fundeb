@@ -1,0 +1,15 @@
+[Unit]
+Description=API Auditor Censo Escolar Fundeb
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/agente-fundeb
+EnvironmentFile=/opt/agente-fundeb/.env
+ExecStart=/opt/agente-fundeb/.venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
