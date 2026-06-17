@@ -5,6 +5,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "8000:8000"
+    expose:
+      - "8000"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api-censo-fundeb.rule=Host(`api.saberes.cloud`)"
+      - "traefik.http.routers.api-censo-fundeb.entrypoints=web"
+      - "traefik.http.services.api-censo-fundeb.loadbalancer.server.port=8000"
     restart: unless-stopped
