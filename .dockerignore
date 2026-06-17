@@ -1,0 +1,9 @@
+.git
+.env
+.venv
+__pycache__
+*.pyc
+uvicorn.out.txt
+uvicorn.err.txt
+README*.md
+BRIEFING_API_CENSO_FUNDEB.md
